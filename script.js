@@ -5,21 +5,27 @@ const longoBt = document.querySelector(".app__card-button--longo");
 const banner = document.querySelector(".app__image");
 const titulo = document.querySelector(".app__title");
 const botoes = document.querySelectorAll(".app__card-button");
+const startPauseBt = document.querySelector("#start-pause");
 const musicaFocoInput = document.querySelector("#alternar-musica");
-const musica = new Audio('/sons/luna-rise-part-one.mp3') 
+
+const musica = new Audio("/sons/luna-rise-part-one.mp3");
+
+let tempoDecorridoEmSegundos = 5;
+let intervaloId; // Adicionando a declaração da variável intervaloId
+
 musica.loop = true;
 
-musicaFocoInput.addEventListener('change', ()=>{
-    if(musica.paused) {
-        musica.play()
-    } else {
-        musica.pause()
-    }
-})
+musicaFocoInput.addEventListener("change", () => {
+  if (musica.paused) {
+    musica.play();
+  } else {
+    musica.pause();
+  }
+});
 
 focoBt.addEventListener("click", () => {
   alterarContexto("foco");
-  focoBt.classList.add('active')
+  focoBt.classList.add("active");
 });
 
 curtoBt.addEventListener("click", () => {
@@ -33,9 +39,9 @@ longoBt.addEventListener("click", () => {
 });
 
 function alterarContexto(contexto) {
-  botoes.forEach(function(contexto){
-    contexto.classList.remove('active')
-  })
+  botoes.forEach(function (contexto) {
+    contexto.classList.remove("active");
+  });
   html.setAttribute("data-contexto", contexto);
   banner.setAttribute("src", `/imagens/${contexto}.png`);
   switch (contexto) {
@@ -50,8 +56,33 @@ function alterarContexto(contexto) {
     case "descanso-longo":
       titulo.innerHTML = `Hora de voltar à superfície,<br>
                 <strong class="app__title-strong">Faça uma pausa longa.</strong>`;
-      break; 
+      break;
     default:
       break;
   }
+}
+
+const contagemRegressiva = () => {
+  if (tempoDecorridoEmSegundos <= 0) {
+    zerar();
+    alert("Tempo Finalizado!");
+    return;
+  }
+  tempoDecorridoEmSegundos -= 1;
+  console.log("Temporizador: " + tempoDecorridoEmSegundos);
 };
+
+startPauseBt.addEventListener("click", iniciar);
+
+function iniciar() {
+  if (intervaloId) {
+    zerar();
+    return;
+  }
+  intervaloId = setInterval(contagemRegressiva, 1000);
+}
+
+function zerar() {
+  clearInterval(intervaloId);
+  intervaloId = null;
+}

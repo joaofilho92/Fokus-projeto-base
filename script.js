@@ -72,9 +72,9 @@ const contagemRegressiva = () => {
   console.log("Temporizador: " + tempoDecorridoEmSegundos);
 };
 
-startPauseBt.addEventListener("click", iniciar);
+startPauseBt.addEventListener("click", iniciarOuPausar);
 
-function iniciar() {
+function iniciarOuPausar() {
   if (intervaloId) {
     zerar();
     return;

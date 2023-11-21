@@ -7,13 +7,21 @@ const titulo = document.querySelector(".app__title");
 const botoes = document.querySelectorAll(".app__card-button");
 const startPauseBt = document.querySelector("#start-pause");
 const musicaFocoInput = document.querySelector("#alternar-musica");
+const musicaPlay = document.querySelector(".app__card-primary-button");
 
+
+
+// Musica
 const musica = new Audio("/sons/luna-rise-part-one.mp3");
+const playTimer = new Audio("/sons/play.wav");
+const pauseTimer = new Audio("/sons/pause.mp3");
+const beep = new Audio("/sons/beep.mp3");
 
 let tempoDecorridoEmSegundos = 5;
-let intervaloId; // Adicionando a declaração da variável intervaloId
+let intervaloId; 
 
 musica.loop = true;
+playTimer.loop = false;
 
 musicaFocoInput.addEventListener("change", () => {
   if (musica.paused) {
@@ -23,6 +31,17 @@ musicaFocoInput.addEventListener("change", () => {
   }
 });
 
+
+musicaPlay.addEventListener('click', () => {
+  if (playTimer.paused) {
+    playTimer.play()
+  } else {
+    playTimer.pause();
+  }
+})
+
+
+// Evento Botoes
 focoBt.addEventListener("click", () => {
   alterarContexto("foco");
   focoBt.classList.add("active");
@@ -38,6 +57,7 @@ longoBt.addEventListener("click", () => {
   longoBt.classList.add("active");
 });
 
+// Alterar texto
 function alterarContexto(contexto) {
   botoes.forEach(function (contexto) {
     contexto.classList.remove("active");
@@ -62,13 +82,15 @@ function alterarContexto(contexto) {
   }
 }
 
+// Contador
+
 const contagemRegressiva = () => {
   if (tempoDecorridoEmSegundos <= 0) {
+    beep.play();
     zerar();
     alert("Tempo Finalizado!");
     return;
-  }
-  tempoDecorridoEmSegundos -= 1;
+  } else tempoDecorridoEmSegundos -= 1;
   console.log("Temporizador: " + tempoDecorridoEmSegundos);
 };
 
@@ -76,6 +98,8 @@ startPauseBt.addEventListener("click", iniciarOuPausar);
 
 function iniciarOuPausar() {
   if (intervaloId) {
+    playTimer.pause();
+    pauseTimer.play();
     zerar();
     return;
   }
@@ -86,3 +110,4 @@ function zerar() {
   clearInterval(intervaloId);
   intervaloId = null;
 }
+
